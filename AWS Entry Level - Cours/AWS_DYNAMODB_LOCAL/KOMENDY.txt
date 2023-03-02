@@ -1,0 +1,43 @@
+Włączenie bazy danych DYNAMODB na WINDOWS (najlepiej to robić w odzielnym oknie niż na tym na którym będzie praca z bazą):
+
+	java -D"java.library.path=./DynamoDBLocal_lib" -jar DynamoDBLocal.jar
+
+Wyłączenie bazy danych za pomocą klawiszy CTRL+C
+
+Wyświetlenie wszystkich tabel:
+
+	aws dynamodb list-tables --endpoint-url http://localhost:8000
+	
+Tworzenie tabel (wszystko w jednej linijce):
+
+	aws dynamodb create-table --table-name CustomerData --attribute-definitions AttributeName=ID,AttributeType=S --key-schema AttributeName=ID,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --endpoint-url http://localhost:8000
+	
+Dodawanie rekordów do tabeli wcześniej najlepiej przygotować sobie plik JSON z rekordami:
+
+	aws dynamodb put-item --table-name CustomerData --endpoint-url http://localhost:8000 --item file://E:\Projekty\dynamodb_local_latest\input_test.json --return-consumed-capacity TOTAL
+
+Przykładowy wyglą pliku JSON z rekordami:
+
+{
+	"ID": {
+		"S": "1"
+	},
+	"Name": {
+		"S": "John"
+	},
+	"Surname": {
+		"S": "Smith"
+	}
+}
+
+Zapytanie do bazy danych DYNAMODB (w JSON przed podwójnym cudzysłowem w WINDOWS należy dać znak \ - BACKSLASH):
+
+	aws dynamodb get-item --table-name CustomerData --key '{\"ID\": {\"S\": \"1\"}}' --return-consumed-capacity TOTAL --endpoint-url http://localhost:8000
+	
+Usuwanie rekordu z bazy danych:
+
+	aws dynamodb delete-item --table-name CustomerData --key '{\"ID\": {\"S\": \"1\"}}' --endpoint-url http://localhost:8000
+	
+Usuwanie tabeli bazy danych DYNAMODB:
+
+	aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name CustomerData
