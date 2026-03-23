@@ -1,0 +1,15 @@
+Połączenie z maszyną wirtualną SSH - Linux/Windows:
+
+	ssh -i serverKeyPair.pem ec2-user@3.253.6.30
+	
+Instalowanie servera Apache:
+
+	sudo yum install httpd
+	
+Uruchomienie servera Apache:
+
+	sudo service httpd start
+	
+Sprawdzenie statusu servera Apache:
+
+	sudo service httpd status

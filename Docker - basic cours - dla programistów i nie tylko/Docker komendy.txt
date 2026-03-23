@@ -1,0 +1,130 @@
+DOCKER KOMENDY:
+
+0. Logowanie do docker hub
+	docker login
+	
+	Podajemy username i password
+
+1. Utworzenie kontenera 
+	docker container run --publish 8080:80 --detach --name=mynginx nginx
+
+		Gdzie:
+			--publish 8080:80	-> określa port na którym ma działac
+			--detach			-> daje możliwość uruchomienia kontenera w tle
+			--name=[nazwa]		-> nadanie nazwy kontenerowi
+
+2. Zatrzymanie kontenera
+	docker container stop [ID_container]
+	
+	lub
+	
+	docker container stop [name_container]
+
+3. Uruchomienie kontenera
+	docker container start [ID_container]
+	
+	lub
+	
+	docker container start [name_container]
+	
+4. Usunięcie kontenera
+	docker container rm [ID_container]
+	
+	lub
+	
+	docker container rm [name_container]
+	
+	Możemy wymusić usunięcie uruchomionego kontenera za pomocą argumentu -f czyli force np:
+	docker container rm -f [ID_container]
+
+5. Wypisanie uruchomionych kontenerów
+	docker container ls
+	
+6. Wypisanie wszystkich kontenerów nawet tych nieuruchomionych
+	docker container ls -a
+	
+7. Wypisanie uruchomionych procesów na kontenerze
+	docker container top [ID_container]
+
+8. Wypisanie logów kontenera
+	docker container logs [ID_container]
+	
+9. Wypisanie informacji o kontenerze (metadanych)
+	docker container inspect [ID_container]
+
+10. Wypisanie statusów wszystkich kontenerów
+	docker container stats
+
+11. Utworzenie sieci
+	docker network create [name_network]
+	
+12. Dodanie kontenera do sieci
+	docker network connect [name_network] [ID_container]
+	
+	Możemy dodać kontener podczas jego tworzenia
+	docker container run --publish 8080:80 --detach --name=mynginx --network=[name_network] nginx 
+	
+13. Usunięcie kontenera z sieci
+	docker network disconnect [name_network] [ID_container]
+	
+14. Usunięcie sieci
+	docker network rm [name_network]
+	
+15. Spradzenie jakie sieci są uruchomione
+	docker network ls
+	
+16. Wypisanie informacji o konkrenej sieci (metadanych)
+	docker network inspect [name_network]
+	
+17. Pobranie obrazu, podczas pobierania wskazujemy na wersję która jest zapisywana jako tag
+	docker image pull [name_image]:[name_tag]
+
+18. Podejrzenie pobranych obrazów
+	docker image ls
+
+19. Wyświetlenie histori obrazów i tworzenia ich warstw (pokazuje nam historię uruchomionych komend na danym obrazie)
+	docker image history [name_image]:[name_tag]
+	
+20. Wyświetlenie informacji o obrazie (metadanych)
+	docker image inspect [name_image]:[name_tag]
+	
+21. Utworzenie nowego obrazu z już dostępnego obrazu
+	docker image tag [name_image]:[name_tag] [name_new_image]
+	
+	Przykładem może być odwołanie się do własnego repository
+	docker image tag [name_image]:[name_tag] [name_user]/[name_new_image]
+	
+22. Utworzenie nowego tagu dla już utworzonego obrazu
+	docker image tag [name_image]:[name_tag] [name_new_image]:[name_new_tag]
+	
+23. Zapisanie obrazu do repository (wypchnięcie)
+	docker image push [name_image]:[name_tag]
+	
+24. Usuwanie obrazu
+	docker image rm [ID_image]
+	
+25. Zaciągnięcie obrazu 
+	docker image pull [name_image]:[name_tag]
+	
+26. Uruchomienie obrazu
+	docker container run -it [name_image]:[name_tag]
+	
+27. Tworzenie obrazu z kontenera
+	docker container commit [ID_container] [name_new_image]:[name_new_tag]
+	
+28. Tworzenie nowego build'u pod nowy obraz poprzez zbudowanie go za pomocą narzędzia buildx
+	docker buildx create --name [name_build] --use --bootstrap
+	
+	Gdzie:
+	--name [name_build]		-> nadanie nazwy dla nowego build'u
+	--use					-> zaraz po utworzeniu możemy go używać
+	--bootstrap				-> początkowa konfiguracja obrazu
+	
+29. Utworzenie nowego obrazu z build'u 
+	docker buildx build --platform [name_platform] --tag [name_new_image]:[name_new_tag] --load
+	
+	Gdzie:
+	--platform	-> Wskazuje na wykorzystane plafrotmy
+	--tag		-> Nadanie nazwę i tag dla nowego obrazu
+	--load		-> Ładuje od razu nowy obraz do naszego dockera aby z niego korzystać
+	
